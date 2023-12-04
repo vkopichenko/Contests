@@ -1,2 +1,4 @@
 # Contests
-My competitive programming solutions: Advent of Code, Codeforces, etc
+
+My competitive programming Kotlin solutions: 
+[Advent of Code](https://adventofcode.com/), [Codeforces](https://codeforces.com/), [Project Euler](https://projecteuler.net/), etc

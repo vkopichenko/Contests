@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DL/DL.iml" filepath="$PROJECT_DIR$/DL/DL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/adventofcode/adventofcode.iml" filepath="$PROJECT_DIR$/adventofcode/adventofcode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/codeforces/codeforces.iml" filepath="$PROJECT_DIR$/codeforces/codeforces.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hackerrank/hackerrank.iml" filepath="$PROJECT_DIR$/hackerrank/hackerrank.iml" />
+      <module fileurl="file://$PROJECT_DIR$/projecteuler/projecteuler.iml" filepath="$PROJECT_DIR$/projecteuler/projecteuler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stepik/stepik.iml" filepath="$PROJECT_DIR$/stepik/stepik.iml" />
+    </modules>
+  </component>
+</project>
