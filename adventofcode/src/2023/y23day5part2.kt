@@ -6,7 +6,7 @@ fun main() {
     data class CategoryMap(val scr: String, val dst: String, val ranges: List<Range>)
 
     val seeds = readln().substringAfter("seeds: ").splitToSequence(' ').map(String::toLong)
-        .windowed(2, 2).map { longRangeOf(it[0], it[1]) }.toList().sortedBy { it.first }
+        .chunked(2).map { longRangeOf(it[0], it[1]) }.toList().sortedBy { it.first }
     readln()
     val maps = generateSequence {
         readlnOrNull()?.let { header ->
