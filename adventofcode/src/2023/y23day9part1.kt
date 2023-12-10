@@ -1,4 +1,3 @@
-
 fun main() {
     fun List<Int>.extrapolate(): Int =
         if (isEmpty()) 0

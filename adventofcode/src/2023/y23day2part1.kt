@@ -1,6 +1,6 @@
-//package adventofcode.y23.day2part1
+package adventofcode.y23.day2part1
 
-enum class Color(val max: Int) { red(12), green(13), blue(14) }
+private enum class Color(val max: Int) { red(12), green(13), blue(14) }
 fun main() {
     generateSequence { readLine() }.mapNotNull { game ->
         game.run { substring(indexOf(' ') + 1, indexOf(':')).toInt() }.takeIf { id ->
