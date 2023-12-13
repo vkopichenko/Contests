@@ -17,7 +17,6 @@ fun main() {
                 }
             }
         }
-
     fun CharSequence.repeat(n: Int, delimiter: String = ""): String =
         generateSequence(this) { it }.take(n).joinToString(delimiter) { it }
 

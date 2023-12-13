@@ -76,6 +76,9 @@ fun <X, Y, R> ((X, Y) -> R).memoizedThreadSafe(): (X, Y) -> R {
 val loadLibraryMemoized = System::loadLibrary.memoized()
 val concatMemoized = String::plus.memoized()
 
+
+fun <T> T?.orElse(default: T): T = this ?: default
+
 private fun repartition(n: Int) = generateSequence(1, Int::inc).take(n).partition { it % 2 == 0 }.run {
     first.asSequence() + second.asReversed().asSequence()
 }
