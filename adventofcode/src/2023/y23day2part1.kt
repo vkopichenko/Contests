@@ -1,4 +1,4 @@
-package adventofcode.y23.day2part1
+package y23day2part1
 
 private enum class Color(val max: Int) { red(12), green(13), blue(14) }
 fun main() {
