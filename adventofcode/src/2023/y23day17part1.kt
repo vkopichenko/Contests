@@ -2,6 +2,7 @@ package y23day17part1;
 
 import y23day17part1.Direction.*
 import java.util.*
+import kotlin.time.measureTime
 
 enum class Direction {
     left, up, right, down;
@@ -20,22 +21,27 @@ operator fun List<IntArray>.contains(pos: Pos) = pos.i in this.indices && pos.j 
 data class State(val from: Direction, val straightSteps: Int)
 fun main() {
     val map = generateSequence { readlnOrNull()?.map { it.digitToInt() }?.toIntArray() }.toList()
-    val heatLosses = Array(map.size) { Array(map[0].size) { mutableMapOf<State, Int>() } }
-    val queue = ArrayDeque<Triple<Pos, State, Int>>()
-    queue += Triple(Pos(0, 0), State(up, 0), 0)
-    while (true) {
-        val (pos, state, heatLoss) = queue.poll() ?: break
-        (-1..1).forEach { turn ->
-            val nextDir = state.from.turn(turn)
-            val nextPos = pos.move(nextDir).takeIf { it in map } ?: return@forEach
-            val nextStraightSteps = (if (turn == 0) state.straightSteps + 1 else 1).takeIf { it <= 3 } ?: return@forEach
-            val nextState = State(nextDir, nextStraightSteps)
-            val heatLossByState = heatLosses.at(nextPos)
-            val nextHeatLoss = heatLoss + map.at(nextPos)
-            if (heatLossByState[nextState]?.let { it <= nextHeatLoss } == true) return@forEach
-            heatLossByState[nextState] = nextHeatLoss
-            queue += Triple(nextPos, nextState, nextHeatLoss)
+    measureTime {
+        val start = Pos(0, 0)
+        val finish = Pos(map.size - 1, map[0].size - 1)
+        val heatLosses = Array(map.size) { Array(map[0].size) { mutableMapOf<State, Int>() } }
+        val queue = PriorityQueue<Triple<Pos, State, Int>>(compareBy { it.third })
+        queue += Triple(start, State(up, 0), 0)
+        while (true) {
+            val (pos, state, heatLoss) = queue.poll() ?: break
+            if (pos == finish) break
+            (-1..1).forEach { turn ->
+                val nextDir = state.from.turn(turn)
+                val nextPos = pos.move(nextDir).takeIf { it in map } ?: return@forEach
+                val nextStraightSteps = (if (turn == 0) state.straightSteps + 1 else 1).takeIf { it <= 3 } ?: return@forEach
+                val nextState = State(nextDir, nextStraightSteps)
+                val heatLossByState = heatLosses.at(nextPos)
+                val nextHeatLoss = heatLoss + map.at(nextPos)
+                if (heatLossByState[nextState]?.let { it <= nextHeatLoss } == true) return@forEach
+                heatLossByState[nextState] = nextHeatLoss
+                queue += Triple(nextPos, nextState, nextHeatLoss)
+            }
         }
-    }
-    heatLosses.at(Pos(map.size - 1, map[0].size - 1)).values.min().let(::println)
+        heatLosses.at(finish).values.min().let(::println)
+    }.let(::println)
 }
