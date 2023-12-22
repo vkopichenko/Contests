@@ -1,5 +1,6 @@
 package y23day10part1;
 import y23day10part1.Direction.*
+import y23day21part1.Pos
 
 private enum class Direction { up, down, left, right }
 fun main() {
@@ -37,10 +38,11 @@ fun main() {
     }
     fun <E> Collection<E>.allEqual(): Boolean = all { it == first() }
 
-    val S = maze.mapIndexedNotNull { i, line ->
-        line.mapIndexedNotNull { j, c -> j.takeIf { c == 'S' } }
-            .takeIf { it.isNotEmpty() }?.map { Pos(i, it) }
-    }[0][0].also(::println)
+    val S = maze.indices.firstNotNullOf { i ->
+        maze[i].indices.firstNotNullOfOrNull { j ->
+            Pos(i, j).takeIf { maze[i][j] == 'S' }
+        }
+    }.also(::println)
     generateSequence(S.startDirections()) { it.map { it.next() } }
         .onEach(::println)
         .takeWhile { !it.allEqual() }
