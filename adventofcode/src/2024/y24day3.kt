@@ -4,7 +4,7 @@ fun main() {
     // Day 1
     """mul\((\d{1,3}),(\d{1,3})\)""".toRegex()
         .findAll(input).map {
-            it.groupValues.subList(1, 3).map(String::toLong).fold(1L) { a, b -> a * b }
+            it.destructured.let { (a, b) -> a.toLong() * b.toLong() }
         }.sum().also(::println)
 
     // Day 2
