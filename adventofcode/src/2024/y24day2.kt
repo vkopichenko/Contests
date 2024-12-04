@@ -14,10 +14,10 @@ fun main() {
             }
         }
 
-    // Day 1
+    // part 1
     reports.count { it.asSequence().isSafe() }.also(::println)
 
-    // Day 2
+    // part 2
     fun <T> List<T>.subsequences() = sequence {
         repeat(size) { iToSkip ->
             yield(asSequence().filterIndexed { i, _ -> i != iToSkip })

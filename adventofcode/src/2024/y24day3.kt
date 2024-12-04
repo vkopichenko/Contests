@@ -1,13 +1,13 @@
 fun main() {
     val input = generateSequence { readlnOrNull() }.joinToString() // OMG, it was multiline!
 
-    // Day 1
+    // part 1
     """mul\((\d{1,3}),(\d{1,3})\)""".toRegex()
         .findAll(input).map {
             it.destructured.let { (a, b) -> a.toLong() * b.toLong() }
         }.sum().also(::println)
 
-    // Day 2
+    // part 2
     var enabled = true
     """mul\((\d{1,3}),(\d{1,3})\)|\Qdo()\E|\Qdon't()\E""".toRegex()
         .findAll(input).filter {

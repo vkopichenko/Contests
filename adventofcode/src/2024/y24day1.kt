@@ -5,10 +5,12 @@ fun main() {
     val lists = generateSequence {
         readlnOrNull()?.splitToSequence(whitespace)?.map(String::toInt)?.iterator()?.run { next() to next() }
     }.unzip()
-    // Day 1
+
+    // part 1
     val sortedPairs = lists.first.sorted() zip lists.second.sorted()
     println(sortedPairs.sumOf { abs(it.first - it.second) })
-    // Day 2
+
+    // part 2
     val secondListDistribution = lists.second.groupingBy { it }.eachCount()
     println(lists.first.sumOf { it * (secondListDistribution[it] ?: 0) })
 }
