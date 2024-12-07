@@ -83,6 +83,24 @@ private fun repartition(n: Int) = generateSequence(1, Int::inc).take(n).partitio
     first.asSequence() + second.asReversed().asSequence()
 }
 
+fun allChoices(n: Int): Sequence<Sequence<Boolean>> =
+    generateSequence<Sequence<Sequence<Boolean>>>(sequenceOf(emptySequence())) { choiceSeqs ->
+        sequenceOf(false, true).flatMap { choice ->
+            choiceSeqs.map { choiceSeq ->
+                sequenceOf(choice) + choiceSeq
+            }
+        }
+    }.elementAt(n)
+
+fun <T> allChoices(n: Int, vararg choices: T): Sequence<Sequence<T>> =
+    generateSequence<Sequence<Sequence<T>>>(sequenceOf(emptySequence())) { choiceSeqs ->
+        sequenceOf(*choices).flatMap { choice ->
+            choiceSeqs.map { choiceSeq ->
+                sequenceOf(choice) + choiceSeq
+            }
+        }
+    }.elementAt(n)
+
 fun main() {
     println((1..12).toList().interchange().joinToString())
 }
