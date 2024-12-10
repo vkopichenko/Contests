@@ -24,7 +24,7 @@ fun main() {
             Pos(i, j).takeIf { map.at(it) == '^' }
         }
     }
-    val guardVisits = Array(map.size) { Array(map[0].length) { false } }
+    val guardVisits = Array(map.size) { BooleanArray(map[0].length) { false } }
 
     measureTimedValue { // part 1
         var pos = startPos
