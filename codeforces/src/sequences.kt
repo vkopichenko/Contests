@@ -99,20 +99,20 @@ fun <T> allChoices(n: Int, vararg choices: T): Sequence<Sequence<T>> =
         }
     }.elementAt(n)
 
-fun <C, T, R> aggregateChoices(depth: Int, initial: R, vararg choices: C, transform: (R, C, Int) -> R?): Sequence<R> =
-    generateSequence(sequenceOf(initial to 0)) { choiceWeights ->
-        sequenceOf(*choices).flatMap { choice ->
-            choiceWeights.mapNotNull { (value, i) ->
-                transform(value, choice, i + 1)?.let { it to i + 1 }
+fun <C, T, R> aggregateChoices(depth: Int, initial: R, choices: Iterable<C>, transform: (R, C, Int) -> R?): Sequence<R> =
+    generateSequence(sequenceOf(initial to 0)) { previousChoiceOutcomes ->
+        choices.asSequence().flatMap { choice ->
+            previousChoiceOutcomes.mapNotNull { (value, i) ->
+                transform(value, choice, i)?.let { it to i + 1 }
             }
         }
     }.elementAt(depth).map { it.first }
-fun <T, C> List<T>.reduceWithChoices(vararg choices: C, transform: (T, C, T) -> T?): Sequence<T> =
-    aggregateChoices<C, T, T>(size - 1, this[0], *choices) { acc, operator, i ->
-        transform(acc, operator, this[i])
+fun <T, C> List<T>.reduceWithChoices(choices: Iterable<C>, transform: (T, C, T) -> T?): Sequence<T> =
+    aggregateChoices<C, T, T>(size - 1, this[0], choices) { acc, operator, i ->
+        transform(acc, operator, this[i + 1])
     }
-fun <T, C, R> List<T>.foldWithChoices(initial: R, vararg choices: C, transform: (R, C, T) -> R?): Sequence<R> =
-    aggregateChoices<C, T, R>(size, initial, *choices) { acc, operator, i ->
+fun <T, C, R> List<T>.foldWithChoices(initial: R, choices: Iterable<C>, transform: (R, C, T) -> R?): Sequence<R> =
+    aggregateChoices<C, T, R>(size, initial, choices) { acc, operator, i ->
         transform(acc, operator, this[i])
     }
 
