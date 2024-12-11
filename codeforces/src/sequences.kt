@@ -53,28 +53,26 @@ fun CharSequence.repeat2(n: Int, delimiter: String = ""): String = let { self ->
     }
 }
 
+// Beware: https://arrow-kt.io/learn/collections-functions/memoize/#recursion
+// TODO: arrow.core.MemoizedDeepRecursiveFunction https://arrow-kt.io/learn/collections-functions/recursive/#memoized-recursive-functions
 fun <X, R> ((X) -> R).memoized(): (X) -> R {
     val cache = mutableMapOf<X, R>()
     return { cache.computeIfAbsent(it) { this(it) } }
 }
-
 fun <X, Y, R> ((X, Y) -> R).memoized(): (X, Y) -> R {
     val cache = mutableMapOf<Pair<X, Y>, R>()
     return { x, y -> cache.computeIfAbsent(x to y) { this(x, y) } }
 }
-
 fun <X, R> ((X) -> R).memoizedThreadSafe(): (X) -> R {
     val cache = ConcurrentHashMap<X, R>()
     return { cache.computeIfAbsent(it) { this(it) } }
 }
-
 fun <X, Y, R> ((X, Y) -> R).memoizedThreadSafe(): (X, Y) -> R {
     val cache = ConcurrentHashMap<Pair<X, Y>, R>()
     return { x, y -> cache.computeIfAbsent(x to y) { this(x, y) } }
 }
-
-val loadLibraryMemoized = System::loadLibrary.memoized()
-val concatMemoized = String::plus.memoized()
+private val loadLibraryMemoized = System::loadLibrary.memoized()
+private val concatMemoized = String::plus.memoized()
 
 
 fun <T> T?.orElse(default: T): T = this ?: default
