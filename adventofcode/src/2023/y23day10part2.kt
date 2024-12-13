@@ -1,4 +1,5 @@
 package y23day10part2;
+
 import y23day10part2.Direction.*
 import java.util.*
 
