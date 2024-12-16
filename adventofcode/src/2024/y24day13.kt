@@ -21,9 +21,9 @@ fun main() {
         fun isZero() = this.x.isZero() && this.y.isZero()
 
         // https://courses.lumenlearning.com/suny-osuniversityphysics/chapter/2-4-products-of-vectors/
-        // A*B*cos
+        // |A|*|B|*cos
         infix fun scalarProduct(that: Vector) = x * that.x + y * that.y
-        // A*B*sin
+        // |A|*|B|*sin
         infix fun vectorProduct(that: Vector) = x * that.y - y * that.x
         infix fun collinear(that: Vector) = (this vectorProduct that).isZero()
         infix fun cosTo(that: Vector) = (this scalarProduct that) / (this.length() * that.length())
@@ -32,22 +32,21 @@ fun main() {
         infix fun projectOnto(that: Vector) = that * ((this scalarProduct that) / that.lengthSquared())
         // hypotenuse: A/B/cos
         infix fun unprojectOnto(that: Vector): Vector? =
-            that * (this.lengthSquared() / (this scalarProduct that)).apply { if (isInfinite()) return null }
+            that * (this.lengthSquared() / (this scalarProduct that).also { if (it.isZero()) return null })
     }
     val ZERO = Vector(0.0, 0.0)
     val ONE = Vector(1.0, 1.0)
 
     data class Line(val point: Vector, val direction: Vector)
     infix fun Line.intersection(that: Line): Vector? =
+        // TODO: using Cramer's rule might be more efficient
         (that.point - this.point)
             .projectOnto(that.direction.perpendicular())
             .unprojectOnto(this.direction)
             ?.plus(this.point)
-    infix fun Line.positiveIntersection(that: Line): Vector? =
-        intersection(that)?.takeIf {
-            (it - this.point) scalarProduct this.direction > 0 &&
-                (it - that.point) scalarProduct that.direction > 0
-        }
+
+    infix fun Vector.collinearIntegerDiv(that: Vector): Long? =
+        (this scalarProduct that).takeIf { it > 0 }?.let { it integerDiv that.lengthSquared() }
 
     val configs = generateSequence { readlnOrNull() }.chunked(4).map { chunk ->
         chunk.subList(0, 3).map { line ->
@@ -63,9 +62,9 @@ fun main() {
             A collinear B && A collinear P ->
                 TODO("Diophantine equations, Extended Euclidean algorithm")
             A collinear B -> null // P is unreachable
-            else -> (Line(ZERO, A) positiveIntersection Line(P, -B))?.let { X ->
-                ((X - ZERO).length() integerDiv A.length())?.let { a ->
-                    ((P - X).length() integerDiv B.length())?.let { b ->
+            else -> (Line(ZERO, A) intersection Line(P, B))?.let { X ->
+                ((X - ZERO) collinearIntegerDiv A)?.let { a ->
+                    ((P - X) collinearIntegerDiv B)?.let { b ->
                         a to b
                     }
                 }
