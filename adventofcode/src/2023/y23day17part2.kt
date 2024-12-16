@@ -2,7 +2,7 @@ package y23day17part2;
 
 import y23day17part2.Direction.*
 import java.util.*
-import kotlin.time.measureTime
+import kotlin.time.measureTimedValue
 
 enum class Direction {
     left, up, right, down;
@@ -22,7 +22,7 @@ data class State(val from: Direction, val straightSteps: Int)
 fun State.valid() = straightSteps in 4..10
 fun main() {
     val map = generateSequence { readlnOrNull()?.map { it.digitToInt() }?.toIntArray() }.toList()
-    measureTime {
+    measureTimedValue {
         val start = Pos(0, 0)
         val finish = Pos(map.size - 1, map[0].size - 1)
         val heatLosses = Array(map.size) { Array(map[0].size) { mutableMapOf<State, Int>() } }
@@ -45,6 +45,6 @@ fun main() {
                 queue += Triple(nextPos, nextState, nextHeatLoss)
             }
         }
-        heatLosses.at(finish).filterKeys { it.valid() }.values.min().let(::println)
-    }.let(::println)
+        heatLosses.at(finish).filterKeys { it.valid() }.values.min()
+    }.also(::println)
 }
