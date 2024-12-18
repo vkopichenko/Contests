@@ -1,4 +1,5 @@
 import kotlin.math.abs
+import kotlin.time.measureTimedValue
 
 fun main() {
     val whitespace = "\\s+".toRegex()
@@ -6,11 +7,13 @@ fun main() {
         readlnOrNull()?.splitToSequence(whitespace)?.map(String::toInt)?.iterator()?.run { next() to next() }
     }.unzip()
 
-    // part 1
-    val sortedPairs = lists.first.sorted() zip lists.second.sorted()
-    println(sortedPairs.sumOf { abs(it.first - it.second) })
+    measureTimedValue { // part 1
+        val sortedPairs = lists.first.sorted() zip lists.second.sorted()
+        sortedPairs.sumOf { abs(it.first - it.second) }
+    }.also(::println)
 
-    // part 2
-    val secondListDistribution = lists.second.groupingBy { it }.eachCount()
-    println(lists.first.sumOf { it * (secondListDistribution[it] ?: 0) })
+    measureTimedValue { // part 2
+        val secondListDistribution = lists.second.groupingBy { it }.eachCount()
+        lists.first.sumOf { it * (secondListDistribution[it] ?: 0) }
+    }.also(::println)
 }
