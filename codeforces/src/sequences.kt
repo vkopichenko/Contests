@@ -81,23 +81,34 @@ private fun repartition(n: Int) = generateSequence(1, Int::inc).take(n).partitio
     first.asSequence() + second.asReversed().asSequence()
 }
 
-fun allChoices(n: Int): Sequence<Sequence<Boolean>> =
+fun allChoices(arity: Int): Sequence<Sequence<Boolean>> =
     generateSequence<Sequence<Sequence<Boolean>>>(sequenceOf(emptySequence())) { choiceSeqs ->
         sequenceOf(false, true).flatMap { choice ->
             choiceSeqs.map { choiceSeq ->
                 sequenceOf(choice) + choiceSeq
             }
         }
-    }.elementAt(n)
+    }.elementAt(arity)
 
-fun <T> allChoices(n: Int, vararg choices: T): Sequence<Sequence<T>> =
+fun <T> allChoices(arity: Int, vararg choices: T): Sequence<Sequence<T>> =
     generateSequence<Sequence<Sequence<T>>>(sequenceOf(emptySequence())) { choiceSeqs ->
         sequenceOf(*choices).flatMap { choice ->
             choiceSeqs.map { choiceSeq ->
                 sequenceOf(choice) + choiceSeq
             }
         }
-    }.elementAt(n)
+    }.elementAt(arity)
+
+fun <T> Sequence<T>.allPermutations(arity: Int): Sequence<Sequence<T>> =
+    map { sequenceOf(it) }.let { firstValues ->
+        generateSequence<Sequence<Sequence<T>>>(sequenceOf(emptySequence())) { prevAritySeq ->
+            firstValues.flatMap { value ->
+                prevAritySeq.map { values ->
+                    value + values
+                }
+            }
+        }.elementAt(arity)
+    }
 
 fun <C, T, R> aggregateChoices(depth: Int, initial: R, choices: Iterable<C>, transform: (R, C, Int) -> R?): Sequence<R> =
     generateSequence(sequenceOf(initial to 0)) { previousChoiceOutcomes ->
