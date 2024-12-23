@@ -22,14 +22,14 @@ operator fun <T> Array<Array<T>>.get(pos: Pos) = this[pos.i][pos.j]
 operator fun <T> Array<Array<T>>.set(pos: Pos, value: T) { this[pos.i][pos.j] = value }
 
 fun main() {
-    val maze = generateSequence { readlnOrNull() }.toList()
-
     fun List<String>.posOf(char: Char) =
         indices.firstNotNullOf { i ->
             this[i].indices.firstNotNullOfOrNull { j ->
-                Pos(i, j).takeIf { maze[it] == char }
+                Pos(i, j).takeIf { this[it] == char }
             }
         }
+
+    val maze = generateSequence { readlnOrNull() }.toList()
     val start = maze.posOf('S')
     val finish = maze.posOf('E')
     val bestScores = HashMap<Pair<Pos, Direction>, Int>()
