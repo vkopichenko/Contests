@@ -16,32 +16,29 @@ fun main() {
         buyerInitialSecretNumbers.sumOf { secretNumbers(it).elementAt(2000).toLong() }
     }.also(::println)
 
-    measureTimedValue { // part 2, 13 sec
-        fun <T> Sequence<T>.allPermutations(arity: Int): Sequence<Sequence<T>> =
-            map { sequenceOf(it) }.let { firstValues ->
-                generateSequence<Sequence<Sequence<T>>>(sequenceOf(emptySequence())) { prevAritySeq ->
-                    firstValues.flatMap { value ->
-                        prevAritySeq.map { values ->
-                            value + values
-                        }
-                    }
-                }.elementAt(arity)
+    fun buyerPricesByDeltas(): List<Map<List<Int>, Int>> =
+        buyerInitialSecretNumbers.map { secretNumbers(it).take(2001).map { it % 10 }.toList() }
+            .map { buyerPrices ->
+                buyerPrices.windowed(5).map { it.last() to it.zipWithNext { a, b -> b - a } }
+            }.map { pricesWithDeltas ->
+                pricesWithDeltas.asReversed().associate { (price, deltas) -> deltas to price }
             }
 
-        val buyerPrices = buyerInitialSecretNumbers.map { secretNumbers(it).take(2000).map { it % 10 }.toList() }
-        val buyerPricesWithDeltas = buyerPrices.map {
-            it.windowed(5).map { it.last() to it.zipWithNext { a, b -> b - a } }
-        }
-        val buyerPricesByDeltas = buyerPricesWithDeltas.map {
-            it.asReversed().associate { (price, deltas) -> deltas to price }
-        }
-        val possibleDeltas = buyerPricesByDeltas.asSequence().flatMap { it.keys }.toSet()
-        (-9..9).asSequence().allPermutations(4).map { it.toList() }
-            .filter { it in possibleDeltas }
-            .maxOf { target ->
-                buyerPricesByDeltas.sumOf {
-                    it.getOrDefault(target, 0)
-                }
+    measureTimedValue { // part 2, 12 sec
+        val buyerPricesByDeltas = buyerPricesByDeltas()
+        val possibleDeltas = buyerPricesByDeltas.asSequence().flatMap { it.keys }.distinct()
+        possibleDeltas.maxOf { target ->
+            buyerPricesByDeltas.sumOf {
+                it.getOrDefault(target, 0)
             }
+        }
+    }.also(::println)
+
+    measureTimedValue { // part 2 optimized per idea from Slack, 1,3 sec
+        buyerPricesByDeltas().fold(mutableMapOf<List<Int>, Int>()) { acc, buyerDeltas ->
+            acc.apply {
+                buyerDeltas.forEach { (delta, price) -> merge(delta, price, Int::plus) }
+            }
+        }.values.max()
     }.also(::println)
 }
