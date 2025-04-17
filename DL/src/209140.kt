@@ -9,7 +9,7 @@ fun main() {
 
     Scanner(File("citystate.in")).useWith {
         File("citystate.out").printWriter().useWith {
-            val cities = Array(nextInt()) { City(next().substring(0, 2).toUpperCase(), next()) }
+            val cities = Array(nextInt()) { City(next().substring(0, 2).uppercase(), next()) }
             val counts = cities.groupingBy { it.name + it.state }.fold(intArrayOf(0, 0)) { a, _ -> ++a[0]; a }
             cities.forEach {
                 counts.getOrElse(it.state + it.name) { null }?.let { ++it[1] }

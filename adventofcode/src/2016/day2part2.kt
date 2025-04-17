@@ -7,7 +7,7 @@ fun main() {
     var y = 0
     for (i in 0 until n) {
         for (j in Math.abs(n/2 - i) until n - Math.abs(n/2 - i)) {
-            a[i][j] = Integer.toHexString(++k)[0].toUpperCase()
+            a[i][j] = Integer.toHexString(++k)[0].uppercaseChar()
             if (a[i][j] == '5') {
                 x = i
                 y = j
