@@ -2,13 +2,13 @@ import kotlin.math.absoluteValue
 import kotlin.time.measureTimedValue
 
 fun main() {
-    val rotations = generateSequence {
-        readlnOrNull()?.let { (if (it.startsWith('R')) 1 else -1) to it.substring(1).toInt() }
+    val rotations = generateSequence(::readlnOrNull).map {
+        (if (it.startsWith('R')) 1 else -1) to it.substring(1).toInt()
     }.toList()
 
     measureTimedValue { // part 1
         rotations.asSequence().runningFold(50) { pos, (dir, shift) ->
-            (pos + dir * shift + 100) % 100
+            (pos + dir * shift) % 100
         }.count { it == 0 }
     }.also(::println)
 
