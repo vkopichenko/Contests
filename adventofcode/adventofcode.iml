@@ -2,7 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
-      <configuration version="5" useProjectSettings="false">
+      <configuration version="5" useProjectSettings="true">
         <compilerSettings>
           <option name="additionalArguments" value=" -opt-in=kotlin.ExperimentalStdlibApi" />
         </compilerSettings>
