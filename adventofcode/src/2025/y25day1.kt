@@ -15,9 +15,8 @@ fun main() {
     measureTimedValue { // part 2
         rotations.asSequence().runningFold(50 to 0) { (pos, _), (dir, shift) ->
             val next = pos + dir * shift
-            val nextPos = (next % 100 + 100) % 100
-            val fullTurns = (next / 100).absoluteValue
-            val clicks = fullTurns + if (pos != 0 && next <= 0) 1 else 0
+            val nextPos = next.mod(100)
+            val clicks = next.absoluteValue / 100 + if (pos != 0 && next <= 0) 1 else 0
             nextPos to clicks
         }/*.onEach(::println)*/.sumOf { (_, clicks) -> clicks }
     }.also(::println)
