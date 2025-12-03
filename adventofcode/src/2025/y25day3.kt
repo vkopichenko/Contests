@@ -5,8 +5,8 @@ fun main() {
 
     measureTimedValue { // part 1
         batteries.asSequence().map { battery ->
-            val max1 = battery.indices.take(battery.indices.last).maxBy { i -> battery[i].digitToInt() }
-            val max2 = battery.indices.drop(max1 + 1).maxBy { i -> battery[i].digitToInt() }
+            val max1 = (0..<battery.indices.last).maxBy { i -> battery[i].digitToInt() }
+            val max2 = ((max1 + 1)..battery.indices.last).maxBy { i -> battery[i].digitToInt() }
             "${battery[max1]}${battery[max2]}".toInt()
         }.sum()
     }.also(::println)
