@@ -10,7 +10,7 @@ fun main() = println(
         val visited = mutableSetOf<Int>()
         generateSequence(listOf(0 to 0)) { states ->
             states.flatMap { (step, state) ->
-                buttons.asSequence().map { step + 1 to (it xor state) }.filter { visited.add(it.second) }
+                buttons.map { step + 1 to (it xor state) }.filter { visited.add(it.second) }
             }
         }.flatten().dropWhile { it.second != target }.first().first
     }
